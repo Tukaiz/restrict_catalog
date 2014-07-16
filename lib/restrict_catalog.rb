@@ -28,10 +28,10 @@ module RestrictCatalog
           accessible_catalog_ids
         ).map{ |c| c.product_ids }.flatten
 
-        can :read, Catalog, id: accessible_catalog_ids
-        can :view, Catalog, id: accessible_catalog_ids
-        can :read, Product, id: accessible_product_ids
-        can :view, Product, id: accessible_product_ids
+        can :read, Catalog, active: true, id: accessible_catalog_ids
+        can :view, Catalog, active: true, id: accessible_catalog_ids
+        can :read, Product, archived: false, id: accessible_product_ids
+        can :view, Product, archived: false, id: accessible_product_ids
       end
 
       def can_manage_catalog_claims
