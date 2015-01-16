@@ -1,6 +1,14 @@
 require "restrict_catalog/version"
 
 module RestrictCatalog
+
+  # This will be executed in the ability class, by defalut, if the Feature is enabled.
+  class Default
+    def self.permissions
+      ["restrict_catalogs_and_products"]
+    end
+  end
+
   class RestrictCatalogFeatureDefinition
     include FeatureSystem::Provides
     def permissions
@@ -18,6 +26,9 @@ module RestrictCatalog
     module Permissions
 
       def restrict_catalogs_and_products
+        cannot :read, Product
+        cannot :read, Catalog
+
         UserEditContext.call(@user, @site)
         accessible_root_ids = @user.full_claims.map(&:catalog_ids).flatten
         accessible_root_catalogs = Catalog.find(accessible_root_ids)
