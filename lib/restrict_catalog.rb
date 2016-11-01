@@ -29,8 +29,7 @@ module RestrictCatalog
         cannot :read, Product
         cannot :read, Catalog
 
-        UserEditContext.call(@user, @site)
-        accessible_root_ids = @user.full_claims.map(&:catalog_ids).flatten
+        accessible_root_ids = @user.claims.for_site(@site).map(&:catalog_ids).flatten
         accessible_root_catalogs = Catalog.find(accessible_root_ids)
         accessible_catalog_ids = accessible_root_catalogs.map(&:subtree_ids).flatten
 
